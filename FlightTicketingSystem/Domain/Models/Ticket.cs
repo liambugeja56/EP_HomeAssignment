@@ -10,8 +10,8 @@ namespace Domain.Models
 {
     public class Ticket
     {
-        [Key] //Ticket PK
-        public Guid Id { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)] //Ticket PK
+        public int Id { get; set; }
 
         [Required]
         public int Row { get; set; }

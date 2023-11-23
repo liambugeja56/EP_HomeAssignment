@@ -177,7 +177,8 @@ namespace DataAccess.Migrations
                 name: "Tickets",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Row = table.Column<int>(type: "int", nullable: false),
                     Column = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FlightIdFK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
