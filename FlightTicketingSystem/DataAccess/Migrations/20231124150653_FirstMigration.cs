@@ -180,7 +180,7 @@ namespace DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Row = table.Column<int>(type: "int", nullable: false),
-                    Column = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Column = table.Column<int>(type: "int", nullable: false),
                     FlightIdFK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Passport = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PricePaid = table.Column<double>(type: "float", nullable: false),

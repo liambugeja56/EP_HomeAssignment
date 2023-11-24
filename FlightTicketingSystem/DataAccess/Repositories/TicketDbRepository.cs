@@ -17,7 +17,12 @@ namespace DataAccess.Repositories
             _airlineDbContext = airlineDbContext;
         }
 
-        public IQueryable<Ticket> GetTickets(Guid flightId)
+        public IQueryable<Ticket?> GetTickets() 
+        {
+            return _airlineDbContext.Tickets;
+        }
+
+        public IQueryable<Ticket?> GetTickets(Guid flightId)
         {
             return _airlineDbContext.Tickets.Where(t => t.FlightIdFK == flightId);
         }
@@ -27,13 +32,13 @@ namespace DataAccess.Repositories
             return _airlineDbContext.Tickets.SingleOrDefault(x => x.Id == id);
         }
 
-        private bool seatAvailable(Guid flightId, int row, string column)
+        private bool seatAvailable(Guid flightId, int row, int column)
         {
             return _airlineDbContext.Tickets.Any(t => 
             t.FlightIdFK == flightId && t.Row == row && t.Column == column && !t.Cancelled);
         }
 
-        public void Book(Ticket ticket) //to be continued
+        public void Book(Ticket ticket)
         {
             bool isSeatAvailable = seatAvailable(ticket.FlightIdFK, ticket.Row, ticket.Column);
 
@@ -45,7 +50,7 @@ namespace DataAccess.Repositories
             else throw new Exception("This seat is already booked, please select an available seat");
         }
 
-        public void Cancel(int id) //to be continued
+        public void Cancel(int id)
         {
             var ticket = GetTicket(id); //getting the ticket using Function that gets us the ticket depending on the id passed
 

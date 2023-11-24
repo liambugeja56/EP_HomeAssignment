@@ -17,7 +17,7 @@ namespace Domain.Models
         public int Row { get; set; }
 
         [Required]
-        public string Column { get; set; }
+        public int Column { get; set; }
 
         [Required]
         [ForeignKey("Flight")] //Foreign Key that links the property to the Flight class

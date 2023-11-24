@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AirlineDbContext))]
-    [Migration("20231123130453_FirstMigration")]
+    [Migration("20231124150653_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,9 +74,8 @@ namespace DataAccess.Migrations
                     b.Property<bool>("Cancelled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Column")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Column")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("FlightIdFK")
                         .HasColumnType("uniqueidentifier");

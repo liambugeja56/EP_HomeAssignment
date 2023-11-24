@@ -17,7 +17,7 @@ namespace Domain.Models
         public int Rows { get; set; }
         
         [Required]
-        public string Columns { get; set; }
+        public int Columns { get; set; }
 
         [Required]
         public DateTime DepartureDate { get; set; }
