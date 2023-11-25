@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repositories;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.Models.ViewModels;
 
 namespace PresentationLayer.Controllers
 {
@@ -20,14 +21,31 @@ namespace PresentationLayer.Controllers
 
         public IActionResult Index()
         {
-            var listOfFlights = _flightDbRepository.GetFlights().OrderBy(x => x.WholesalePrice);
+             var listOfFlights = _flightDbRepository.GetFlights().OrderBy(x => x.WholesalePrice);
 
             var availableFlights = listOfFlights
-                .Where(flight => !IsFlightFullyBooked(flight.Id))
-                .Where(flight => flight.DepartureDate > DateTime.Now).ToList();
+                                    .Where(f => f.DepartureDate > DateTime.Now)
+                                    .ToList();
 
-            return View(availableFlights);
+            double markUpPercentage = 1.2;
+
+            var showFlights = from f in availableFlights
+                               select new ListFlightsViewModel()
+                               {
+                                   Id = f.Id,
+                                   DepartureDate = f.DepartureDate,
+                                   ArrivalDate = f.ArrivalDate,
+                                   CountryFrom = f.CountryFrom,
+                                   CountryTo = f.CountryTo,
+                                   RetailPrice = f.WholesalePrice * markUpPercentage
+                               };
+
+             return View(showFlights);
         }
+
+
+
+
 
         private bool IsFlightFullyBooked(Guid flightId)
         {

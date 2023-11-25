@@ -1,4 +1,5 @@
 using DataAccess.DataContext;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,9 @@ namespace PresentationLayer
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AirlineDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped(typeof(FlightDbRepository));
+            builder.Services.AddScoped(typeof(TicketDbRepository));
 
             var app = builder.Build();
 
