@@ -4,7 +4,6 @@ namespace PresentationLayer.Models.ViewModels
 {
     public class ListFlightsViewModel
     {
-        [Key] //assigning the Primary Key for the Flight class 
         public Guid Id { get; set; }
 
         [Required]
@@ -24,5 +23,7 @@ namespace PresentationLayer.Models.ViewModels
         public double WholesalePrice { get; set; }
 
         public double RetailPrice {  get; set; }
+
+        public bool isFullyBooked {  get; set; }
     }
 }
