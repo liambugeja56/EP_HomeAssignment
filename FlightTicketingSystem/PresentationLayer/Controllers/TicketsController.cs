@@ -21,15 +21,12 @@ namespace PresentationLayer.Controllers
 
         public IActionResult Index()
         {
-            var listOfFlights = _flightDbRepository.GetFlights();
-
-            var availableFlights = listOfFlights
-                                    .Where(f => f.DepartureDate > DateTime.Now)
+            var listOfFlights = _flightDbRepository.GetFlights().Where(f => f.DepartureDate > DateTime.Now)
                                     .ToList();
 
             double markUpPrice = 1.2;
 
-            var showFlights = from f in availableFlights
+            var showFlights = from f in listOfFlights
                               select new ListFlightsViewModel()
                               {
                                   Id = f.Id,
@@ -37,6 +34,7 @@ namespace PresentationLayer.Controllers
                                   ArrivalDate = f.ArrivalDate,
                                   CountryFrom = f.CountryFrom,
                                   CountryTo = f.CountryTo,
+                                  WholesalePrice = f.WholesalePrice,
                                   RetailPrice = f.WholesalePrice * markUpPrice,
                                   isFullyBooked = IsFlightFullyBooked(f.Id)
                               };
@@ -44,7 +42,7 @@ namespace PresentationLayer.Controllers
             return View(showFlights);
         }
 
-        private bool IsFlightFullyBooked(Guid flightId)
+        public bool IsFlightFullyBooked(Guid flightId)
         {
             var flight = _flightDbRepository.GetFlight(flightId);
 
@@ -53,34 +51,6 @@ namespace PresentationLayer.Controllers
             int flightSeatCapacity = flight.Rows * flight.Columns;
 
             return bookedSeats >= flightSeatCapacity;
-        }
-
-        public IActionResult Details(Guid flightId)
-        {
-            var flight = _flightDbRepository.GetFlight(flightId);
-
-            double markUpPrice = 1.2;
-
-            if (flight == null)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                ListFlightsViewModel myFlight = new ListFlightsViewModel()
-                {
-                    Id = flight.Id,
-                    DepartureDate = flight.DepartureDate,
-                    ArrivalDate = flight.ArrivalDate,
-                    CountryFrom = flight.CountryFrom,
-                    CountryTo = flight.CountryTo,
-                    WholesalePrice = flight.WholesalePrice,
-                    RetailPrice = flight.WholesalePrice * markUpPrice,
-                    isFullyBooked = flight.Equals(true)
-                };
-
-                return View(myFlight);
-            }
         }
     }
 }

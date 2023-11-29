@@ -4,6 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
+<h1>Flight Tickets</h1>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -12,19 +14,23 @@
     @foreach (var item in Model)
     {
         <div class="card">
-            <a href="\Tickets\Details\@item.Id">
+            <a href="\Home\Index\">
                 <div class="container">
                     <h4><b>@item.CountryTo</b></h4>
                     <p>€@item.RetailPrice</p>
 
-                    @if (@item.isFullyBooked){
+                    @if(item.isFullyBooked)
+                    {
                         <p>Flight is fully booked</p>
                     }
-                    else{
-                        <button>Details</button>
-                    }                    
+                    else
+                    {
+                        <button type="button" class="btn btn-primary">
+                            Flight Details
+                        </button>
+                    }
                 </div>
             </a>
-        </div>    
+        </div>
     }
 </div>

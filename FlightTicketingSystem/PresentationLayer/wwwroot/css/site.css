@@ -17,6 +17,7 @@ body {
     margin-bottom: 60px;
 }
 
+
 .card {
     /* Add shadows to create the "card" effect */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -27,6 +28,7 @@ body {
     margin-right: 10px;
     width: 300px;
     text-align: center;
+    padding: 20px;
 }
 
     .card a {
@@ -38,6 +40,14 @@ body {
     .card:hover {
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
+
+.card-content {
+    margin-bottom: 15px; /* Adjust margin bottom for space between content and button */
+}
+
+.card-button {
+    margin-top: 15px; /* Adjust margin top for space between content and button */
+}
 
 /* Add some padding inside the card container */
 .container {
