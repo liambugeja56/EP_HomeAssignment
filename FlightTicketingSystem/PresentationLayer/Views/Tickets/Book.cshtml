@@ -1,0 +1,56 @@
+﻿@model PresentationLayer.Models.ViewModels.BookFlightViewModel
+
+@{
+    ViewData["Title"] = "Book";
+}
+
+<h1>Book</h1>
+
+<h4>BookFlightViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Book">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Row" class="control-label"></label>
+                <input asp-for="Row" class="form-control" />
+                <span asp-validation-for="Row" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Column" class="control-label"></label>
+                <input asp-for="Column" class="form-control" />
+                <span asp-validation-for="Column" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Flight to:</label> 
+                <select name="FlightIdFK" class="form-select">
+                   @foreach (var flight in Model.Flights)
+                    {
+                        @if (flight.DepartureDate > DateTime.Now)
+                        {
+                            <option value="@flight.Id">@flight.CountryTo</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="FlightIdFK" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Passport" class="control-label"></label>
+                <input asp-for="Passport" class="form-control" />
+                <span asp-validation-for="Passport" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -22,17 +22,12 @@ namespace DataAccess.Repositories
             return _airlineDbContext.Tickets;
         }
 
-        public IQueryable<Ticket?> GetTickets(Guid flightId)
-        {
-            return _airlineDbContext.Tickets.Where(t => t.FlightIdFK == flightId);
-        }
-
         public Ticket? GetTicket(int id) //getting a ticket based on the Id
         {
             return _airlineDbContext.Tickets.SingleOrDefault(x => x.Id == id);
         }
 
-        private bool seatAvailable(Guid flightId, int row, int column)
+        public bool seatAvailable(Guid flightId, int row, int column)
         {
             return _airlineDbContext.Tickets.Any(t => 
             t.FlightIdFK == flightId && t.Row == row && t.Column == column && !t.Cancelled);
@@ -42,7 +37,7 @@ namespace DataAccess.Repositories
         {
             bool isSeatAvailable = seatAvailable(ticket.FlightIdFK, ticket.Row, ticket.Column);
 
-            if(isSeatAvailable) //if the seat is available
+            if(!isSeatAvailable) //if the seat is available
             {
                 _airlineDbContext.Tickets.Add(ticket);
                 _airlineDbContext.SaveChanges();

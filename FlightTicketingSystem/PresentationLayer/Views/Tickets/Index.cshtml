@@ -9,28 +9,32 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
+<br/>
 <div>
     @foreach (var item in Model)
     {
         <div class="card">
-            <a href="\Home\Index\">
-                <div class="container">
-                    <h4><b>@item.CountryTo</b></h4>
-                    <p>€@item.RetailPrice</p>
-
-                    @if(item.isFullyBooked)
-                    {
-                        <p>Flight is fully booked</p>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-primary">
-                            Flight Details
+            @if(!item.isFullyBooked)
+            {
+                <a href="\Tickets\Details\@item.Id">
+                    <div class="container">
+                        <h4><b>@item.CountryTo</b></h4>
+                        <p>€@item.RetailPrice</p>
+                        <button class="btn btn-outline-primary">
+                            Details
                         </button>
-                    }
-                </div>
-            </a>
+                    </div>
+                </a>
+            }
+            else{
+                <a href="#">
+                    <div class="container">
+                        <h4><b>@item.CountryTo</b></h4>
+                        <p>€@item.RetailPrice</p>
+                        <p>Fully Booked</p>
+                    </div>
+                </a>
+            }
         </div>
     }
 </div>

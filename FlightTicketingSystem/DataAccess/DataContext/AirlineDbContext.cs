@@ -17,8 +17,8 @@ namespace DataAccess.DataContext
         {
         }
 
-        public DbSet<Flight> Flights { get; set; }
-        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Flight> ?Flights { get; set; }
+        public DbSet<Ticket> ?Tickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
