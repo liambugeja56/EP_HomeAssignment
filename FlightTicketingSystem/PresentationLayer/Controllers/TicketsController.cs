@@ -55,13 +55,43 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost]
-        public IActionResult Book(BookFlightViewModel model)
+        public IActionResult Book(BookFlightViewModel model, [FromServices] IWebHostEnvironment host)
         {
             try
             {
                 var flight = _flightDbRepository.GetFlight(model.FlightIdFK);
 
-                if(flight.DepartureDate > DateTime.Now)
+                string fileName = "";
+
+                if(model.ImageFile != null)
+                {
+                    string uploadFolder = Path.Combine(host.WebRootPath, "uploads/passports");
+
+                    if (!Directory.Exists(uploadFolder))
+                    {
+                        Directory.CreateDirectory(uploadFolder);
+                    }
+
+                    fileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
+
+                    string filePath = Path.Combine(uploadFolder, fileName);
+
+                    try
+                    {
+                        using(FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
+                        {
+                            model.ImageFile.CopyTo(fs);
+                            fs.Flush();
+                        }
+                    }
+                    catch (Exception)  
+                    { 
+                    
+                    }
+
+                } 
+
+                if (flight.DepartureDate > DateTime.Now)
                 {
 
                     if (!model.Cancelled)
@@ -73,7 +103,8 @@ namespace PresentationLayer.Controllers
                             FlightIdFK = model.FlightIdFK,
                             Passport = model.Passport,
                             PricePaid = flight.WholesalePrice * flight.CommissionRate,
-                            Cancelled = model.Cancelled
+                            Cancelled = model.Cancelled, 
+                            PassportImage = fileName
                         });
 
                         TempData["message"] = "Ticket was booked successfully";

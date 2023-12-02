@@ -27,5 +27,7 @@ namespace PresentationLayer.Models.ViewModels
         public double RetailPrice {  get; set; }
 
         public bool isFullyBooked {  get; set; }
+
+        public string? PassportImage { get; set; }
     }
 }

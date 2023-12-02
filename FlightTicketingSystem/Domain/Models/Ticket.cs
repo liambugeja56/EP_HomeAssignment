@@ -32,5 +32,7 @@ namespace Domain.Models
         public double PricePaid { get; set; }
 
         public bool Cancelled { get; set; }
+
+        public string? PassportImage { get; set; }
     }
 }

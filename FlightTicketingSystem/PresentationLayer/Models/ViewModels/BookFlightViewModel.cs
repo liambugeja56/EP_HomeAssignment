@@ -24,5 +24,10 @@ namespace PresentationLayer.Models.ViewModels
         public double PricePaid { get; set; }
 
         public bool Cancelled { get; set; }
+
+        //path
+        public string? PassportImage { get; set; }
+
+        public IFormFile ImageFile { get; set; }
     }
 }
