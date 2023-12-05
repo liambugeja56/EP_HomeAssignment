@@ -1,7 +1,13 @@
 ﻿@model PresentationLayer.Models.ViewModels.BookFlightViewModel
+@using Domain.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<Domain.Models.AuthenticatedUser> UserManager
 
 @{
     ViewData["Title"] = "Book";
+
+    var user = ((AuthenticatedUser)await UserManager.GetUserAsync(User));
+    string passport = user?.Passport ?? "";
 }
 
 <h1>Book</h1>
@@ -36,10 +42,10 @@
                 </select>
                 <span asp-validation-for="FlightIdFK" class="text-danger"></span>
             </div>
-
+            <br />
             <div class="form-group">
-                <label asp-for="Passport" class="control-label"></label>
-                <input asp-for="Passport" class="form-control" />
+                <label asp-for="Passport" class="control-label">Passport</label>
+                <input asp-for="Passport" class="form-control" value="@passport" />
                 <span asp-validation-for="Passport" class="text-danger"></span>
             </div>
             <br />

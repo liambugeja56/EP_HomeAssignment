@@ -9,9 +9,11 @@ namespace PresentationLayer.Models.ViewModels
         public Guid Id { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime DepartureDate { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime ArrivalDate { get; set; }
 
         [Required]
@@ -19,10 +21,6 @@ namespace PresentationLayer.Models.ViewModels
 
         [Required]
         public string CountryTo { get; set; }
-
-        [Required]
-        [Range(0, int.MaxValue)]
-        public double WholesalePrice { get; set; }
 
         public double RetailPrice {  get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using DataAccess.Repositories;
+using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models.ViewModels;
@@ -10,9 +11,9 @@ namespace PresentationLayer.Controllers
 
         // Dependency Injection -------------------------------------------------------------------------------
         private FlightDbRepository _flightDbRepository;
-        private TicketDbRepository _ticketDbRepository;
+        private ITicket _ticketDbRepository;
 
-        public TicketsController(FlightDbRepository flightDbRepository, TicketDbRepository ticketDbRepository)
+        public TicketsController(FlightDbRepository flightDbRepository, ITicket ticketDbRepository)
         {
             _flightDbRepository = flightDbRepository;
             _ticketDbRepository = ticketDbRepository;
@@ -35,7 +36,6 @@ namespace PresentationLayer.Controllers
                                   ArrivalDate = f.ArrivalDate,
                                   CountryFrom = f.CountryFrom,
                                   CountryTo = f.CountryTo,
-                                  WholesalePrice = f.WholesalePrice,
                                   RetailPrice = f.WholesalePrice * markUpPrice,
                                   isFullyBooked = IsFlightFullyBooked(f.Id)
                               };
@@ -91,7 +91,7 @@ namespace PresentationLayer.Controllers
 
                 } 
 
-                if (flight.DepartureDate > DateTime.Now)
+                if (flight.DepartureDate > DateTime.Now && !IsFlightFullyBooked(model.FlightIdFK))
                 {
 
                     if (!model.Cancelled)
@@ -121,7 +121,7 @@ namespace PresentationLayer.Controllers
                 }
                 else
                 {
-                    TempData["error"] = "Ticket was not booked succesfully";
+                    TempData["error"] = "Ticket was not booked succesfully, please make sure the flight is not fully booked";
                     model.Flights = _flightDbRepository.GetFlights().ToList();
                     return View(model);
                 }                     
@@ -154,7 +154,6 @@ namespace PresentationLayer.Controllers
                     ArrivalDate = flight.ArrivalDate,
                     CountryFrom = flight.CountryFrom,
                     CountryTo = flight.CountryTo,
-                    WholesalePrice = flight.WholesalePrice,
                     RetailPrice = flight.WholesalePrice * markUpPrice,
                     isFullyBooked = IsFlightFullyBooked(flight.Id)
                 };

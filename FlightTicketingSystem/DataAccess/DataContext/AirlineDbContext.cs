@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DataAccess.DataContext
 {
     // abstraction of the database which models the database
-    public class AirlineDbContext : IdentityDbContext
+    public class AirlineDbContext : IdentityDbContext<AuthenticatedUser>
     {
         public AirlineDbContext(DbContextOptions<AirlineDbContext> options)
             : base(options)

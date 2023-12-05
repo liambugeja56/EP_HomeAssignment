@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DataAccess.Repositories;
 using Domain.Models;
+using Domain.Interfaces;
 
 namespace PresentationLayer.Controllers
 {
     public class AdminController : Controller
     {
         private FlightDbRepository _flightDbRepository;
-        private TicketDbRepository _ticketDbRepository;
+        private ITicket _ticketDbRepository;
 
-        public AdminController(FlightDbRepository flightDbRepository, TicketDbRepository ticketDbRepository)
+        public AdminController(FlightDbRepository flightDbRepository, ITicket ticketDbRepository)
         {
             _flightDbRepository = flightDbRepository;
             _ticketDbRepository = ticketDbRepository;
