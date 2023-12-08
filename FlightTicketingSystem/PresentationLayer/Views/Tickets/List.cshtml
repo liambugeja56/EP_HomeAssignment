@@ -1,0 +1,26 @@
+﻿@model IEnumerable<PresentationLayer.Models.ViewModels.ListTicketsViewModel>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>Ticket List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div>
+    @foreach (var item in Model)
+    {
+        <div class="card">
+
+            <a href="#">
+                <div class="container">
+                    <h2><b>@item.FlightTo</b></h2>
+                    <h4>Ticket Id: @item.Id</h4>
+                    <p>€@item.PricePaid</p>
+                </div>
+            </a>
+        </div>
+    }
+</div>

@@ -4,10 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Flight Details</h1>
 
 <div>
-    <h4>ListFlightsViewModel</h4>
+    <h4>List of Flights</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -55,7 +55,7 @@
     </dl>
 </div>
 <div>
-    <div>
+    <div class="mt-4">
         @if (!User.Identity.IsAuthenticated)
         {
             <span>

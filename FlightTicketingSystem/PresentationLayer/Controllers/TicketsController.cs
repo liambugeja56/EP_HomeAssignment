@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Models.ViewModels;
 
@@ -12,11 +13,13 @@ namespace PresentationLayer.Controllers
         // Dependency Injection -------------------------------------------------------------------------------
         private FlightDbRepository _flightDbRepository;
         private ITicket _ticketDbRepository;
+        private UserManager<AuthenticatedUser> _userManager;
 
-        public TicketsController(FlightDbRepository flightDbRepository, ITicket ticketDbRepository)
+        public TicketsController(FlightDbRepository flightDbRepository, ITicket ticketDbRepository, UserManager<AuthenticatedUser> userManager)
         {
             _flightDbRepository = flightDbRepository;
             _ticketDbRepository = ticketDbRepository;
+            _userManager = userManager;
         }
         // Dependency Injection -------------------------------------------------------------------------------
 
@@ -160,6 +163,40 @@ namespace PresentationLayer.Controllers
 
                 return View(myFlight);
             }
+        }
+
+        public async Task<IActionResult> List()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                string userPassport = await GetUserPassport();
+
+                var userTickets = _ticketDbRepository.GetTickets().
+                    Where(t => t.Passport == userPassport);
+
+                var ticketViewModels = userTickets.Select(ticket => new ListTicketsViewModel
+                {
+                    Id = ticket.Id,
+                    Row = ticket.Row,
+                    Column = ticket.Column,
+                    FlightIdFK = ticket.FlightIdFK,
+                    Passport = ticket.Passport,
+                    PricePaid = ticket.PricePaid,
+                    Cancelled = ticket.Cancelled,
+                    PassportImage = ticket.PassportImage,
+                    FlightTo = _flightDbRepository.GetFlight(ticket.FlightIdFK).CountryTo
+                });
+
+                return View(ticketViewModels);
+            }
+
+            return View();
+        }
+
+        private async Task<string?> GetUserPassport()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            return user?.Passport;
         }
 
         private bool IsFlightFullyBooked(Guid flightId)
