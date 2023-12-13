@@ -34,7 +34,10 @@ namespace DataAccess.Repositories
 
         public Ticket? GetTicket(int id)
         {
-            throw new NotImplementedException();
+            var ticketList = GetTickets().ToList();
+            var ticket = ticketList.FirstOrDefault(t => t.Id == id);
+
+            return ticket;
         }
 
         public IQueryable<Ticket> GetTickets() 
@@ -71,7 +74,23 @@ namespace DataAccess.Repositories
             System.IO.File.WriteAllText(_path, myTicketsJson);
         }
 
-        public void Cancel(int id) { }
+        public void Cancel(int id) 
+        {
+            var ticketList = GetTickets().ToList();
+            var removableTicket = ticketList.FirstOrDefault(t => t.Id == id);
+
+            if (removableTicket != null)
+            {
+                ticketList.Remove(removableTicket);
+
+                string updatedTickets = JsonSerializer.Serialize(ticketList);
+                System.IO.File.WriteAllText(_path, updatedTickets);
+            }
+            else
+            {
+                throw new ArgumentException("Ticket not found with the given ID");
+            }
+        }
 
         private int GetNextId()
         {

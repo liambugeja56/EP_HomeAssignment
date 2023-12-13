@@ -97,7 +97,7 @@ namespace PresentationLayer.Controllers
                 if (flight.DepartureDate > DateTime.Now && !IsFlightFullyBooked(model.FlightIdFK))
                 {
 
-                    if (!model.Cancelled)
+                    if (model.Cancelled == false)
                     {
                         _ticketDbRepository.Book(new Ticket()
                         {
