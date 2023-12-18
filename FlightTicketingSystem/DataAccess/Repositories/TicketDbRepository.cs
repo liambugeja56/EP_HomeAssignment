@@ -30,8 +30,7 @@ namespace DataAccess.Repositories
 
         public bool seatAvailable(Guid flightId, int row, int column)
         {
-            return _airlineDbContext.Tickets.Any(t => 
-            t.FlightIdFK == flightId && t.Row == row && t.Column == column && !t.Cancelled);
+            return _airlineDbContext.Tickets.Any(t => t.FlightIdFK == flightId && t.Row == row && t.Column == column && !t.Cancelled);
         }
 
         public void Book(Ticket ticket)

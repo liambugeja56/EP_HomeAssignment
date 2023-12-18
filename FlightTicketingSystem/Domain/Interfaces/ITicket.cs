@@ -16,5 +16,7 @@ namespace Domain.Interfaces
         void Book(Ticket ticket);
 
         void Cancel(int id);
+
+        bool seatAvailable(Guid flightId, int row, int column);
     }
 }

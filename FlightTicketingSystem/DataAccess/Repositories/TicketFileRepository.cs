@@ -92,6 +92,13 @@ namespace DataAccess.Repositories
             }
         }
 
+        public bool seatAvailable(Guid flightId, int row, int column)
+        {
+            var bookedSeats = GetTickets().Where(t => t.FlightIdFK == flightId && t.Row == row && t.Column == column && !t.Cancelled);
+            return !bookedSeats.Any();
+        }
+
+
         private int GetNextId()
         {
             int maxId = _ticketDbRepository.GetTickets().Max(t => t.Id);

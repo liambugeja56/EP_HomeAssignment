@@ -137,6 +137,68 @@ namespace PresentationLayer.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult SeatingPlan(Guid flightId)
+        {
+            var flightInfo = _flightDbRepository.GetFlight(flightId);
+
+            SeatingPlanViewModel model = new SeatingPlanViewModel();
+            model.MaxRows = flightInfo.Rows;
+            model.MaxCols = flightInfo.Columns;
+            model.Seats = new List<Seat>();
+
+            // Populate seat availability information
+            for (int row = 1; row <= model.MaxRows; row++)
+            {
+                for (int col = 1; col <= model.MaxCols; col++)
+                {
+                    var seatId = row + "," + col;
+
+                    // Check if the seat is booked for the given flightId
+                    bool isSeatBooked = _ticketDbRepository.seatAvailable(flightId, row, col);
+
+                    Seat mySeat = new Seat
+                    {
+                        Id = seatId,
+                        IsBooked = isSeatBooked // Set the IsBooked property based on seat availability
+                    };
+
+                    model.Seats.Add(mySeat); // Add the seat to the Seats list in the ViewModel
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult SeatingPlan(SeatingPlanViewModel m)
+        {
+            try
+            {
+                var flightInfo = _flightDbRepository.GetFlight(m.FlightIdFK);
+
+                SeatingPlanViewModel model = new SeatingPlanViewModel();
+
+                int row = Convert.ToInt16(m.SelectedSeat.Split(new char[] { ',' })[0]);
+                int col = Convert.ToInt16(m.SelectedSeat.Split(new char[] { ',' })[1]);
+
+                // Create or update the ticket with the selected seat information
+                Ticket newTicket = new Ticket
+                {
+                    FlightIdFK = m.FlightIdFK,
+                    Row = row,
+                    Column = col
+                };
+
+                return RedirectToAction("Book");
+            }
+            catch (Exception)
+            { 
+                throw new Exception("this seat is already booked");
+            }
+            
+        }
+
 
         public IActionResult Details(Guid id)
         {

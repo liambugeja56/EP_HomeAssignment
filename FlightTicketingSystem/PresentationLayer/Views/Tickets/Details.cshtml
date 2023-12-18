@@ -58,8 +58,9 @@
     <div class="mt-4">
         @if (!User.Identity.IsAuthenticated)
         {
+
             <span>
-                <a href="\Tickets\Book" class="btn btn-primary">
+                <a href="@Url.Action("SeatingPlan", "Tickets", new { flightId = Model.Id })" class="btn btn-primary">
                     Book
                 </a>
                 <a href="~/Identity/Account/Login" class="btn btn-outline-primary">
@@ -72,7 +73,7 @@
         }
         else
         {
-            <a href="\Tickets\Book" class="btn btn-primary">
+            <a href="@Url.Action("SeatingPlan", "Tickets", new { flightId = Model.Id })" class="btn btn-primary">
                 Book
             </a>
         }
