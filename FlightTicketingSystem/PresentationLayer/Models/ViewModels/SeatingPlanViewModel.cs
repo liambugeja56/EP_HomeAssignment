@@ -1,4 +1,6 @@
-﻿namespace PresentationLayer.Models.ViewModels
+﻿using Domain.Models;
+
+namespace PresentationLayer.Models.ViewModels
 {
     public class SeatingPlanViewModel
     {

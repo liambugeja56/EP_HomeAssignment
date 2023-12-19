@@ -61,3 +61,33 @@ img {
     margin: auto;
     display: block;
 }
+
+/* Style for a special button */
+.special-btn {
+    font-weight: normal; /* Remove bold text */
+    color: black; /* Set the text color to black */
+    border: none; /* Remove button border */
+    width: 60px; /* Set button width */
+    height: 60px; /* Set button height */
+    margin: 5px;
+    padding-top: 17px;
+}
+
+    /* Style for a disabled button */
+    .special-btn.btn-disabled {
+        background-color: red; /* Change background color to red */
+        color: black; /* Change text color to white */
+        pointer-events: none; /* Disable click events */
+    }
+
+    /* Style for an active (enabled) button */
+    .special-btn.btn-active {
+        background-color: green; /* Change background color to green */
+        color: black; /* Change text color to white */
+    }
+
+        /* Hover effect for active buttons */
+        .special-btn.btn-active:hover {
+            opacity: 0.8; /* Reduce opacity on hover */
+            /* Add additional styles for hover effect if needed */
+        }

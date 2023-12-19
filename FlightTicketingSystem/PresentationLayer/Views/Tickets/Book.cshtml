@@ -18,28 +18,28 @@
     <div class="col-md-4">
         <form asp-action="Book" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group disabled">
                 <label asp-for="Row" class="control-label"></label>
-                <input asp-for="Row" class="form-control" />
+                <input asp-for="Row" class="form-control" value="@Model.Row" readonly />
                 <span asp-validation-for="Row" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <br/>
+            <div class="form-group disabled">
                 <label asp-for="Column" class="control-label"></label>
-                <input asp-for="Column" class="form-control" />
+                <input asp-for="Column" class="form-control" value="@Model.Column" readonly/>
                 <span asp-validation-for="Column" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
+            <br />
+            <div class="form-group disabled">
                 <label class="control-label">Flight to:</label> 
-                <select name="FlightIdFK" class="form-select">
-                   @foreach (var flight in Model.Flights)
+                @foreach (var flight in Model.Flights)
+                {
+                    @if (flight.Id == Model.FlightIdFK && flight.DepartureDate > DateTime.Now)
                     {
-                        @if (flight.DepartureDate > DateTime.Now)
-                        {
-                            <option value="@flight.Id">@flight.CountryTo</option>
-                        }
+                        <input type="text" class="form-control" value="@flight.CountryTo" readonly />
                     }
-                </select>
+                }
+                <input type="hidden" name="FlightIdFK" value="@Model.FlightIdFK" />
                 <span asp-validation-for="FlightIdFK" class="text-danger"></span>
             </div>
             <br />

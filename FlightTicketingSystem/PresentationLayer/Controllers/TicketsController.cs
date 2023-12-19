@@ -47,11 +47,19 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Book()
+        public IActionResult Book(Guid flightId, int selectedRow, int selectedColumn)
         {
-            BookFlightViewModel viewModel = new BookFlightViewModel();
-
-            viewModel.Flights = _flightDbRepository.GetFlights().ToList();
+            var viewModel = new BookFlightViewModel
+            {
+                FlightIdFK = flightId,
+                Row = selectedRow,
+                Column = selectedColumn,
+                Flights = _flightDbRepository.GetFlights().ToList(),
+                Passport = "",
+                PricePaid = 0,
+                Cancelled = false,
+                PassportImage = ""
+            };
 
             return View(viewModel);
 
@@ -94,10 +102,10 @@ namespace PresentationLayer.Controllers
 
                 } 
 
-                if (flight.DepartureDate > DateTime.Now && !IsFlightFullyBooked(model.FlightIdFK))
+                if (flight.DepartureDate > DateTime.Now && !_ticketDbRepository.seatAvailable(model.FlightIdFK, model.Row, model.Column))
                 {
 
-                    if (model.Cancelled == false)
+                    if (model.Cancelled == false && !IsFlightFullyBooked(model.FlightIdFK))
                     {
                         _ticketDbRepository.Book(new Ticket()
                         {
@@ -106,7 +114,7 @@ namespace PresentationLayer.Controllers
                             FlightIdFK = model.FlightIdFK,
                             Passport = model.Passport,
                             PricePaid = flight.WholesalePrice * flight.CommissionRate,
-                            Cancelled = model.Cancelled, 
+                            Cancelled = false,
                             PassportImage = fileName
                         });
 
@@ -129,11 +137,16 @@ namespace PresentationLayer.Controllers
                     return View(model);
                 }                     
             }
-            catch
+            catch (Exception ex)
             {
-                TempData["error"] = "Ticket was not booked successfully";
-                model.Flights = _flightDbRepository.GetFlights().ToList();
-                return View(model);
+
+                TempData["error"] = "Ticket was not booked successfully: " + ex.Message;
+                // Return to the "SeatingPlan" action if there's an exception
+                return RedirectToAction("SeatingPlan", new { model.FlightIdFK });
+
+                //TempData["error"] = "Ticket was not booked successfully";
+                //model.Flights = _flightDbRepository.GetFlights().ToList();
+                //return View(model);
             }
         }
 
@@ -143,6 +156,9 @@ namespace PresentationLayer.Controllers
             var flightInfo = _flightDbRepository.GetFlight(flightId);
 
             SeatingPlanViewModel model = new SeatingPlanViewModel();
+
+            //model.Flights = _flightDbRepository.GetFlights().ToList();
+            model.FlightIdFK = flightId;
             model.MaxRows = flightInfo.Rows;
             model.MaxCols = flightInfo.Columns;
             model.Seats = new List<Seat>();
@@ -177,24 +193,15 @@ namespace PresentationLayer.Controllers
             {
                 var flightInfo = _flightDbRepository.GetFlight(m.FlightIdFK);
 
-                SeatingPlanViewModel model = new SeatingPlanViewModel();
-
                 int row = Convert.ToInt16(m.SelectedSeat.Split(new char[] { ',' })[0]);
                 int col = Convert.ToInt16(m.SelectedSeat.Split(new char[] { ',' })[1]);
 
-                // Create or update the ticket with the selected seat information
-                Ticket newTicket = new Ticket
-                {
-                    FlightIdFK = m.FlightIdFK,
-                    Row = row,
-                    Column = col
-                };
-
-                return RedirectToAction("Book");
+                //return RedirectToAction("Book", new { flightId = m.FlightIdFK, selectedRow = row, selectedColumn = col });
+                return View("Book");
             }
             catch (Exception)
             { 
-                throw new Exception("this seat is already booked");
+                throw new Exception("This seat is already booked");
             }
             
         }

@@ -5,12 +5,12 @@
 }
 
 <h1>SeatingPlan</h1>
-
 <h4>SeatingPlanViewModel</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-21">
-        <form asp-action="SeatingPlan">
+        <form asp-action="SeatingPlan" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             @for (int row = 1; row <= Model.MaxRows; row++)
@@ -21,13 +21,14 @@
                         var seatId = row + "," + col;
 
                         <span style="margin-right: @(col == 3 ? 65 : 7.5)px;">
+                            <input type="hidden" name="SelectedSeat" value="@seatId" />
                             @if (Model.Seats.SingleOrDefault(x => x.Id == seatId).IsBooked)
                             {
-                                <input type="submit" style="width:60px; height:60px; background-color:red" value="@seatId" name="SelectedSeat" disabled="disabled" />
+                                <a href="@Url.Action("Book", "Tickets", new { flightId = Model.FlightIdFK })" class="btn btn-disabled special-btn">@seatId</a>
                             }
                             else
                             {
-                                <input type="submit" style="width:60px; height:60px; background-color:green" value="@seatId" name="SelectedSeat" />
+                                <a href="@Url.Action("Book", "Tickets", new { flightId = Model.FlightIdFK, selectedRow = row, selectedColumn = col })" class="btn btn-active special-btn">@seatId</a>
                             }
                         </span>
                     }
@@ -35,9 +36,8 @@
                 <br />
             }
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+            <input type="hidden" name="FlightIdFK" value="@Model.FlightIdFK" />
+
         </form>
     </div>
 </div>
