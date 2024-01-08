@@ -18,5 +18,9 @@ namespace Domain.Interfaces
         void Cancel(int id);
 
         bool seatAvailable(Guid flightId, int row, int column);
+
+        int totalSeatBooking(Guid flightId);
+
+        int totalSeatAvailability(Guid flightId, int row, int column);
     }
 }

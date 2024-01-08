@@ -1,4 +1,5 @@
-﻿using Domain.Interfaces;
+﻿using DataAccess.DataContext;
+using Domain.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -96,6 +97,20 @@ namespace DataAccess.Repositories
         {
             var bookedSeats = GetTickets().Where(t => t.FlightIdFK == flightId && t.Row == row && t.Column == column && !t.Cancelled);
             return !bookedSeats.Any();
+        }
+
+        public int totalSeatBooking(Guid flightId)
+        {
+            return GetTickets().Count(t => t.FlightIdFK == flightId);
+        }
+
+        public int totalSeatAvailability(Guid flightId, int row, int column)
+        {
+            var totalSeats = row * column;
+            var bookedSeats = totalSeatBooking(flightId);
+
+            var availableSeats = totalSeats - bookedSeats;
+            return availableSeats >= 0 ? availableSeats : 0; 
         }
 
 

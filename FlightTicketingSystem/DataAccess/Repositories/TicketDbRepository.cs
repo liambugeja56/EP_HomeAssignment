@@ -56,5 +56,26 @@ namespace DataAccess.Repositories
             }
             else throw new Exception("Ticket cannot be cancelled. Make sure that the ticket exists");
         }
+
+        public int totalSeatBooking(Guid flightId)
+        {
+            return _airlineDbContext.Tickets.Count(t => t.FlightIdFK == flightId);
+        }
+
+        public int totalSeatAvailability(Guid flightId, int rows, int columns)
+        {
+            var flight = _airlineDbContext.Flights.FirstOrDefault(f => f.Id == flightId);
+
+            if (flight != null)
+            {
+                var totalSeats = rows * columns;
+                var bookedSeats = totalSeatBooking(flightId);
+
+                var availableSeats = totalSeats - bookedSeats;
+                return availableSeats >= 0 ? availableSeats : 0; //seats available are non negative
+            }
+
+            return 0; //if flight info not found return 0 avail seats 
+        }
     }
 }

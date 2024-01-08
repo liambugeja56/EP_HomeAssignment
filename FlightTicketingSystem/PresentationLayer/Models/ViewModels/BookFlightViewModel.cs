@@ -1,6 +1,7 @@
 ﻿using Domain.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using PresentationLayer.Validator;
 
 namespace PresentationLayer.Models.ViewModels
 {
@@ -9,9 +10,11 @@ namespace PresentationLayer.Models.ViewModels
         public List<Flight> Flights { get; set; }
 
         [Required]
+        [OverbookingSeatsValidation()]
         public int Row { get; set; }
 
         [Required]
+        [OverbookingSeatsValidation()]
         public int Column { get; set; }
 
         [Required]
