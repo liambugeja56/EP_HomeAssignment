@@ -91,3 +91,33 @@ img {
             opacity: 0.8; /* Reduce opacity on hover */
             /* Add additional styles for hover effect if needed */
         }
+
+.ticket-details {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+    .ticket-details h3 {
+        font-size: 18px;
+        margin-top: 0;
+    }
+
+    .ticket-details ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+        .ticket-details ul li {
+            margin-bottom: 10px;
+        }
+
+.ticket-img {
+    text-align: center;
+    width: 300px;
+    height: 200px;
+    margin: auto;
+    display: block;
+}
+

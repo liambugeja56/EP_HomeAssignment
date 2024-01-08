@@ -49,8 +49,15 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.isFullyBooked)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.isFullyBooked)
+        <dd class="col-sm-10">
+            @if (Model.isFullyBooked)
+            {
+                <span>Yes</span>
+            }
+            else
+            {
+                <span>No</span>
+            }
         </dd>
     </dl>
 </div>

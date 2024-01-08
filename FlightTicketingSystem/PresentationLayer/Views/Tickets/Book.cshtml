@@ -8,11 +8,13 @@
 
     var user = ((AuthenticatedUser)await UserManager.GetUserAsync(User));
     string passport = user?.Passport ?? "";
+
+    bool isAuthenticated = User.Identity.IsAuthenticated;
+    bool isPassportEmpty = !string.IsNullOrEmpty(passport);
 }
 
-<h1>Book</h1>
+<h1>Booking</h1>
 
-<h4>BookFlightViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -43,17 +45,25 @@
                 <span asp-validation-for="FlightIdFK" class="text-danger"></span>
             </div>
             <br />
+
+                <div class="form-group">
+                    <label asp-for="Passport" class="control-label">Passport</label>
+                    @if (!isPassportEmpty)
+                    {
+                        <input asp-for="Passport" class="form-control" required />
+                    }
+                    else if (isAuthenticated)
+                    {
+                        <input asp-for="Passport" class="form-control" value="@passport" readonly="readonly" required/>
+                    }
+                    <span asp-validation-for="Passport" class="text-danger"></span>
+                </div>
+            <br/>
             <div class="form-group">
-                <label asp-for="Passport" class="control-label">Passport</label>
-                <input asp-for="Passport" class="form-control" value="@passport" />
-                <span asp-validation-for="Passport" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="PassportImage" class="control-label"></label>
+                <label asp-for="PassportImage" class="control-label">Passport Image</label>
                 <input type="file" name="ImageFile" class="form-control" />
                 <span asp-validation-for="PassportImage" class="text-danger"></span>
-            </div>
+            </div> 
             <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

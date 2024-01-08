@@ -17,7 +17,7 @@ namespace PresentationLayer.Models.ViewModels
         [Required]
         public Guid FlightIdFK { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Passport cannot be left blank")]
         public string Passport { get; set; }
 
         [Range(0, int.MaxValue)]

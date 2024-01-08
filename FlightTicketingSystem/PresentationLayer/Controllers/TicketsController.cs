@@ -153,37 +153,45 @@ namespace PresentationLayer.Controllers
         [HttpGet]
         public IActionResult SeatingPlan(Guid flightId)
         {
-            var flightInfo = _flightDbRepository.GetFlight(flightId);
-
-            SeatingPlanViewModel model = new SeatingPlanViewModel();
-
-            //model.Flights = _flightDbRepository.GetFlights().ToList();
-            model.FlightIdFK = flightId;
-            model.MaxRows = flightInfo.Rows;
-            model.MaxCols = flightInfo.Columns;
-            model.Seats = new List<Seat>();
-
-            // Populate seat availability information
-            for (int row = 1; row <= model.MaxRows; row++)
+            try
             {
-                for (int col = 1; col <= model.MaxCols; col++)
+                var flightInfo = _flightDbRepository.GetFlight(flightId);
+
+                SeatingPlanViewModel model = new SeatingPlanViewModel();
+
+                //model.Flights = _flightDbRepository.GetFlights().ToList();
+                model.FlightIdFK = flightId;
+                model.MaxRows = flightInfo.Rows;
+                model.MaxCols = flightInfo.Columns;
+                model.Seats = new List<Seat>();
+
+                // Populate seat availability information
+                for (int row = 1; row <= model.MaxRows; row++)
                 {
-                    var seatId = row + "," + col;
-
-                    // Check if the seat is booked for the given flightId
-                    bool isSeatBooked = _ticketDbRepository.seatAvailable(flightId, row, col);
-
-                    Seat mySeat = new Seat
+                    for (int col = 1; col <= model.MaxCols; col++)
                     {
-                        Id = seatId,
-                        IsBooked = isSeatBooked // Set the IsBooked property based on seat availability
-                    };
+                        var seatId = row + "," + col;
 
-                    model.Seats.Add(mySeat); // Add the seat to the Seats list in the ViewModel
+                        // Check if the seat is booked for the given flightId
+                        bool isSeatBooked = _ticketDbRepository.seatAvailable(flightId, row, col);
+
+                        Seat mySeat = new Seat
+                        {
+                            Id = seatId,
+                            IsBooked = isSeatBooked // Set the IsBooked property based on seat availability
+                        };
+
+                        model.Seats.Add(mySeat); // Add the seat to the Seats list in the ViewModel
+                    }
                 }
-            }
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it accordingly
+                return RedirectToAction("ErrorPage");
+            }            
         }
 
         [HttpPost]
@@ -232,6 +240,32 @@ namespace PresentationLayer.Controllers
 
                 return View(myFlight);
             }
+        }
+
+        public IActionResult PastPurchases(int id)
+        {
+            var ticketPurchases = _ticketDbRepository.GetTicket(id);
+
+            var pastPurchases = new List<ListTicketsViewModel>();
+
+            
+            var ticketViewModel = new ListTicketsViewModel
+            {
+                Id = ticketPurchases.Id,
+                Row = ticketPurchases.Row,
+                Column = ticketPurchases.Column,
+                FlightIdFK = ticketPurchases.FlightIdFK,
+                FlightTo = ticketPurchases.Flight.CountryTo, 
+                Passport = ticketPurchases.Passport,
+                PricePaid = ticketPurchases.PricePaid,
+                Cancelled = ticketPurchases.Cancelled,
+                PassportImage = ticketPurchases.PassportImage
+            };
+
+            pastPurchases.Add(ticketViewModel);
+           
+
+            return View(pastPurchases);
         }
 
         public async Task<IActionResult> List()

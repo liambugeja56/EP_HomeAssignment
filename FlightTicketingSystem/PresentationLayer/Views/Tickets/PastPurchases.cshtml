@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PresentationLayer.Models.ViewModels.ListTicketsViewModel>
+
+@{
+    ViewData["Title"] = "Past Purchases";
+}
+
+<h1>Past Purchases</h1>
+
+@foreach (var ticket in Model)
+{
+    <div class="ticket-details">
+        <h3>Ticket ID: @ticket.Id</h3>
+        <ul>
+            <li><strong>Row:</strong> @ticket.Row</li>
+            <li><strong>Column:</strong> @ticket.Column</li>
+            <li><strong>Flight To:</strong> @ticket.FlightTo</li>
+            <li><strong>Passport:</strong> @ticket.Passport</li>
+            <li><strong>Price Paid:</strong> €@ticket.PricePaid</li>
+            <li><strong>Cancelled:</strong> @(ticket.Cancelled ? "Yes" : "No")</li>
+            <div>
+                <strong>Passport Image:</strong>
+                @if (!string.IsNullOrEmpty(ticket.PassportImage))
+                {
+                    <div>
+                        <img src="@Url.Content("~/uploads/passports/" + ticket.PassportImage)" alt="Passport Image" class="ticket-img" />
+                    </div>
+                }
+                else
+                {
+                    <p>No image</p>
+                }
+            </div>
+        </ul>
+    </div>
+}
